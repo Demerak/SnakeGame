@@ -5,9 +5,10 @@
 
 I decided to implement my version of the popular arcade snake game. I should have used paint instead of creating JLabel as my cells, but it ended up working great still. I used the software design pattern MVC to make this game.
 
-<img src="snakegame.gif" width="400" height="400"/>
+<p align="center">
+  <img src="snakegame.gif" width="200" height="200"/>
+</p>
  
-
 ## Getting Started
 
 1. The first step is to clone the repo
