@@ -1,11 +1,13 @@
 import java.awt.*;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Random;
-
 import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+/**
+ * The GraphicalView class is the GUI of the game
+ * 
+ * @author Demerak
+ */
 public class GraphicalView extends JFrame {
 
     private SnakeGameModel model;
@@ -20,13 +22,16 @@ public class GraphicalView extends JFrame {
     private JLabel[][] cells = new JLabel[NUMBER_TILE_X][NUMBER_TILE_Y];
     private JLabel scoreResult;
 
+    /**
+     * constructor
+     */
     public GraphicalView(SnakeGameModel model, SnakeGameController controller) {
         super("Snake Game");
 
         this.model = model;
         this.controller = controller;
 
-        // Top Panel
+        // top panel
         JPanel topPanel = new JPanel();
         scoreResult = new JLabel("Score: " + model.getApplesEaten());
         scoreResult.setFont(new Font("Serif", Font.BOLD, 25));
@@ -34,16 +39,16 @@ public class GraphicalView extends JFrame {
         topPanel.add(scoreResult, BorderLayout.CENTER);
         this.add(topPanel, BorderLayout.NORTH);
 
-        // The actual Snake Game Board
+        // the snake game board
         JPanel boardPanel = new JPanel();
         boardPanel.setBackground(Color.BLACK);
         boardPanel.setLayout(new GridLayout(SCREEN_WIDTH / TILE_SIZE, SCREEN_HEIGHT / TILE_SIZE));
         for (int row = 0; row < NUMBER_TILE_X; row++) {
             for (int col = 0; col < NUMBER_TILE_Y; col++) {
                 JLabel cell = new JLabel();
-                cells[row][col] = cell;
-                cell.setBackground(Color.BLACK);
                 cell.setOpaque(true);
+                cell.setBackground(Color.BLACK);
+                cells[row][col] = cell;
                 boardPanel.add(cell);
             }
         }
@@ -58,17 +63,22 @@ public class GraphicalView extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * setter for the JLabel background color
+     */
     public void setGameCell(Color c, int row, int col) {
         cells[row][col].setBackground(c);
+        cells[row][col].setDoubleBuffered(true);
     }
 
+    /**
+     * setter for the top panel
+     */
     public void setTopPanel() {
         if (controller.getRunning()) {
             scoreResult.setText("Score: " + model.getApplesEaten());
         } else {
             scoreResult.setText("Game Over");
         }
-
     }
-
 }

@@ -1,10 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import java.util.Arrays;
-import java.util.Random;
 import javax.swing.Timer;
 
+/**
+ * The GraphicalView class is the controller of the game
+ * 
+ * @author Demerak
+ */
 public class SnakeGameController implements ActionListener {
 
     // Model
@@ -15,13 +17,19 @@ public class SnakeGameController implements ActionListener {
 
     private static final int GAME_SPEED = 100;
 
+    // direction 'r', or 'l' or 'u' or 'd'
     private char direction = 'r';
+
     private boolean running = false;
 
     private Timer timer;
 
+    // position of apple [row, column]
     int[] applePosition;
 
+    /**
+     * constructor
+     */
     public SnakeGameController() {
         running = true;
 
@@ -33,52 +41,50 @@ public class SnakeGameController implements ActionListener {
         timer = new Timer(GAME_SPEED, this);
         timer.start();
 
+        // set up the first apple
         applePosition = model.newApple();
-
         view.setGameCell(Color.RED, applePosition[0], applePosition[1]);
-
     }
 
+    /**
+     * getter for the variable running
+     * 
+     * @return
+     *         the value of running
+     */
     public boolean getRunning() {
         return running;
     }
 
-    public void update() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
+        // get the snake position and number of body parts
         int[][] snakeBodyPos = model.move(direction);
-        int snakeBodyTile = model.getSnakeBodyTile();
+        int snakeBodyParts = model.getSnakeBodyParts();
 
+        // check if a collision occurred with wall or body parts
         running = !model.checkCollision();
 
         if (running) {
-
-            for (int i = 0; i < snakeBodyTile; i++) {
+            for (int i = 0; i < snakeBodyParts; i++) {
                 if (i == 0) {
                     view.setGameCell(new Color(34, 139, 34), snakeBodyPos[i][0], snakeBodyPos[i][1]);
                 } else {
                     view.setGameCell(Color.GREEN, snakeBodyPos[i][0], snakeBodyPos[i][1]);
                 }
             }
-            view.setGameCell(Color.BLACK, snakeBodyPos[snakeBodyTile][0], snakeBodyPos[snakeBodyTile][1]);
+            // set the tile with the color black where the tail previously was
+            view.setGameCell(Color.BLACK, snakeBodyPos[snakeBodyParts][0], snakeBodyPos[snakeBodyParts][1]);
+            if (model.checkApple()) {
+                applePosition = model.newApple();
+                // set the new apple position
+                view.setGameCell(Color.RED, applePosition[0], applePosition[1]);
+            }
         } else {
             timer.stop();
         }
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        if (running) {
-            update();
-            if (model.checkApple()) {
-                view.setGameCell(Color.BLACK, applePosition[0], applePosition[1]);
-                applePosition = model.newApple();
-                view.setGameCell(Color.RED, applePosition[0], applePosition[1]);
-            }
-            view.setTopPanel();
-        }
-
+        view.setTopPanel();
     }
 
     public class MyKeyAdapter extends KeyAdapter {
@@ -110,9 +116,6 @@ public class SnakeGameController implements ActionListener {
     }
 
     public static void main(String[] args) {
-
-        SnakeGameController controller = new SnakeGameController();
-
+        new SnakeGameController();
     }
-
 }
