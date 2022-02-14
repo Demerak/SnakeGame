@@ -5,7 +5,7 @@
 
 I decided to implement my version of the popular arcade snake game. I should have used paint instead of creating JLabel as my cells, but it ended up working great still. I used the software design pattern MVC to make this game.
 
-![](snakegame.gif)
+![](snakegame.gif = 400x400)
  
 
 ## Getting Started
